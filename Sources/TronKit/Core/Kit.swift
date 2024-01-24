@@ -117,9 +117,10 @@ extension Kit {
         )
     }
 
-    public func send(contract: Contract, signer: Signer, feeLimit: Int? = 0) async throws  {
+    public func send(contract: Contract, signer: Signer, feeLimit: Int? = 0) async throws -> String {
         let newTransaction = try await transactionSender.sendTransaction(contract: contract, signer: signer, feeLimit: feeLimit)
         transactionManager.handle(newTransaction: newTransaction)
+        return newTransaction.transactionId
     }
 
     public func accountActive(address: Address) async throws -> Bool {
