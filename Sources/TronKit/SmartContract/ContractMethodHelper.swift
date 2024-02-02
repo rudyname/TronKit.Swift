@@ -40,9 +40,7 @@ public class ContractMethodHelper {
                     data += pad(data: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                     arraysData += pad(data: BigUInt(argument.count).serialize()) + argument
                 case let argument as UInt64:
-                    data += pad(data: BigUInt(argument).serialize())
-                case let argument as UInt128:
-                    data += pad(data: BigUInt(argument).serialize())
+                    data += pad(data: argument.serialize())
                 default:
                     ()
             }
@@ -175,4 +173,46 @@ public class ContractMethodHelper {
         Data(repeating: 0, count: (max(0, 32 - data.count))) + data
     }
 
+}
+
+extension UInt64 {
+
+    public func serialize() -> Data {
+        
+        let byteCount = MemoryLayout<UInt64>.size
+        
+        guard byteCount > 0 else { return Data() }
+        
+        var data = Data(count: byteCount)
+        
+        data.withUnsafeMutableBytes { buffPtr in
+            
+            let p = buffPtr.bindMemory(to: UInt8.self)
+            
+            var i = byteCount - 1
+            
+            var word = self // используем self
+            
+            for _ in 0..<64 {
+                
+                p[i] = UInt8(word & 0xFF)
+                
+                word >>= 8
+                
+                if i == 0 {
+                    
+                    break
+                    
+                }
+                
+                i -= 1
+                
+            }
+            
+        }
+        
+        return data
+        
+    }
+    
 }
