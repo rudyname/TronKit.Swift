@@ -39,6 +39,10 @@ public class ContractMethodHelper {
                 case let argument as Data:
                     data += pad(data: BigUInt(arguments.count * 32 + arraysData.count).serialize())
                     arraysData += pad(data: BigUInt(argument.count).serialize()) + argument
+                case let argument as UInt64:
+                    data += pad(data: BigUInt(argument).serialize())
+                case let argument as UInt128:
+                    data += pad(data: BigUInt(argument).serialize())
                 default:
                     ()
             }
