@@ -193,7 +193,7 @@ extension UInt64 {
             
             var word = self // используем self
             
-            for _ in 0..<64 {
+            for _ in 0..<16 {
                 
                 p[i] = UInt8(word & 0xFF)
                 
